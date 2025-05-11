@@ -48,8 +48,15 @@ class Board:
         if self.cells_content[0][2] == self.cells_content[1][1] == self.cells_content[2][0] !=None:
             return True
         return False
+    
+    def check_draw(self):
+        for row in self.cells_content:
+            for cell in row:
+                if cell is None:
+                    return False  
+        return True  
     def display_message(self,message, color):
-        x = SCREEN_WIDTH - (PADDING * 2)
+        x = SCREEN_WIDTH - (PADDING * 3)
         y= PADDING
         font = pygame.font.SysFont(TEXT_FONT, 30)
         score_text = font.render(message, True, color)
