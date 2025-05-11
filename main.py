@@ -23,12 +23,12 @@ def main():
                     pygame.quit()
                     return
             if event.type == pygame.MOUSEBUTTONUP:
-                if not_win:
+                x,y = event.pos
+                if not_win and board.is_user_click_in_cell(x, y) and board.is_cell_empty(x, y):
                     
-                    x,y = event.pos
                     board.place_symbol(current_player, x, y)
                     not_win= not board.check_winner()
-                    if not_win:
+                    if not_win and board.get_cell_from_mouse(x,y):
                         current_player = O if current_player == X else X               
                         color = BLUE if color == RED else RED
                 

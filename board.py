@@ -26,16 +26,22 @@ class Board:
             y = PADDING + (i * CELL_SIZE)
             pygame.draw.line(surface,self.color,(PADDING , y),(PADDING + cul_size, y), LINE_THICKNESS)
     def place_symbol(self, kind, x, y ):
-         x_pos,y_pose = self.get_cell_from_mouse(x, y)
-         if x_pos is not None and y_pose is not None and self.cells_content[y_pose][x_pos] is None:
+         if self.is_user_click_in_cell(x, y) and self.is_cell_empty(x, y):
+            x_pos,y_pose = self.get_cell_from_mouse(x, y)
             self.cells_content[y_pose][x_pos]=Symbol(kind, PADDING + (x_pos * CELL_SIZE), PADDING +(y_pose * CELL_SIZE), CELL_SIZE)
     
+    def is_user_click_in_cell(self, x, y):
+        return PADDING <= x and x < (PADDING + (self.num_cul * CELL_SIZE)) and PADDING <= y and y < (PADDING + (self.num_row * CELL_SIZE))
+    
+    def is_cell_empty(self, x, y):
+        col, row= self.get_cell_from_mouse(x, y)
+        return self.cells_content[row][col] is None
+    
     def get_cell_from_mouse(self, x, y):
-        if PADDING <= x and x < (PADDING + (self.num_cul * CELL_SIZE)) and PADDING <= y and y < (PADDING + (self.num_row * CELL_SIZE)):
-            col = (x - PADDING) // CELL_SIZE
-            row = (y - PADDING) // CELL_SIZE
-            return col, row
-        return None, None
+        col = (x - PADDING) // CELL_SIZE
+        row = (y - PADDING) // CELL_SIZE
+        return col, row
+
     
     def check_winner(self):
         for i in range(self.num_row):
