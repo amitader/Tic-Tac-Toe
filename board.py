@@ -2,11 +2,11 @@ import pygame
 from constants import *
 from symbol import Symbol
 class Board:
-    def __init__(self,screen, num_row,num_cul, color=BLACK):
+    def __init__(self,screen, num_row,num_cul):
         self.screen=screen
         self.num_row=num_row
         self.num_cul=num_cul
-        self.color=color
+        self.current_symbol_color=RED
         self.cells_content=[[None for _ in range(self.num_row)] for _ in range(self.num_cul)]
 
     def create_static_grid_surface(self):
@@ -20,15 +20,16 @@ class Board:
         cul_size=CELL_SIZE * self.num_cul
         for i in range(self.num_row +1):
             x = PADDING + (i * CELL_SIZE)
-            pygame.draw.line(surface,self.color,(x, PADDING),(x , PADDING+row_size), LINE_THICKNESS)
+            pygame.draw.line(surface,BLACK,(x, PADDING),(x , PADDING+row_size), LINE_THICKNESS)
         
         for i in range(self.num_cul +1):
             y = PADDING + (i * CELL_SIZE)
-            pygame.draw.line(surface,self.color,(PADDING , y),(PADDING + cul_size, y), LINE_THICKNESS)
+            pygame.draw.line(surface,BLACK,(PADDING , y),(PADDING + cul_size, y), LINE_THICKNESS)
     def place_symbol(self, kind, x, y ):
          if self.is_user_click_in_cell(x, y) and self.is_cell_empty(x, y):
             x_pos,y_pose = self.get_cell_from_mouse(x, y)
             self.cells_content[y_pose][x_pos]=Symbol(kind, PADDING + (x_pos * CELL_SIZE), PADDING +(y_pose * CELL_SIZE), CELL_SIZE)
+            
     
     def is_user_click_in_cell(self, x, y):
         return PADDING <= x and x < (PADDING + (self.num_cul * CELL_SIZE)) and PADDING <= y and y < (PADDING + (self.num_row * CELL_SIZE))
@@ -53,6 +54,7 @@ class Board:
             return True
         if self.cells_content[0][2] == self.cells_content[1][1] == self.cells_content[2][0] !=None:
             return True
+        self.current_symbol_color = BLUE if self.current_symbol_color == RED else RED
         return False
     
     def check_draw(self):
@@ -61,10 +63,10 @@ class Board:
                 if cell is None:
                     return False  
         return True  
-    def display_message(self,message, color):
+    def display_message(self,message):
         x = SCREEN_WIDTH - (PADDING * 3)
         y= PADDING
         font = pygame.font.SysFont(TEXT_FONT, 30)
-        score_text = font.render(message, True, color)
+        score_text = font.render(message, True, self.current_symbol_color)
         self.screen.blit(score_text, (x, y)) 
         

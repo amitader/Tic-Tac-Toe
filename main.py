@@ -30,7 +30,7 @@ def main():
                     not_win= not board.check_winner()
                     if not_win and board.get_cell_from_mouse(x,y):
                         current_player = O if current_player == X else X               
-                        color = BLUE if color == RED else RED
+                        
                 
 
         for row in board.cells_content:
@@ -40,9 +40,9 @@ def main():
         screen.fill("white")
         screen.blit(grid_surface, (0, 0))
         if not_win:
-            board.display_message(f"{current_player} turn", color)
+            board.display_message(f"{current_player} turn")
         else:
-            board.display_message(f"{current_player} win!!", color)
+            board.display_message(f"{current_player} win!!")
         pygame.display.flip()
         dt = clock.tick(60) / 1000
         
